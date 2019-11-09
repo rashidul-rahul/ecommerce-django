@@ -5,7 +5,10 @@ from .forms import ContactForm, RegistrationForm, LoginForm
 
 
 def home_page(request):
-    return render(request, "home.html")
+    context = {
+        "brand_name": "Ecommerce"
+    }
+    return render(request, "home.html", context=context)
 
 
 def contact_page(request):

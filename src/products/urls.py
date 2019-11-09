@@ -6,6 +6,7 @@ from products.views import (ProductListView,
                             )
 
 urlpatterns = [
-    url(r'^$', ProductListView.as_view()),
-    url(r'^product/(?P<slug>[\w-]+)/$', ProductDetailView.as_view())
+    url(r'^$', ProductListView.as_view(), name="list"),
+    url(r'^product/(?P<slug>[\w-]+)/$', ProductDetailView.as_view(),
+        name="details")
 ]

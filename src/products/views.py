@@ -45,4 +45,3 @@ class ProductDetailView(DetailView):
         except:
             raise "Unknown Error"
         return isinstance
-
