@@ -3,6 +3,7 @@ import os
 
 from django.urls import reverse
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
 from .utils import unique_slug_generator
 
@@ -24,13 +25,27 @@ class ProductQuerySet(models.query.QuerySet):
     def featured(self):
         return self.filter(featured=True)
 
+    def active(self):
+        return self.filter(active=True)
+
+    def search(self, query):
+        looksups = (Q(title__icontains=query)
+                    | Q(description__icontains=query)
+                    | Q(price__icontains=query)
+                    | Q(tag__title__icontains=query)
+                    )
+        return self.filter(looksups).distinct()
+
 
 class ProductManager(models.Manager):
     def get_queryset(self):
         return ProductQuerySet(self.model, using=self._db)
 
-    def features(self):
-        return self.get_queryset().filter(featured=True)
+    def featured(self):
+        return self.get_queryset().featured()
+
+    def is_active(self):
+        return self.get_queryset().active()
 
     def get_by_id(self, id):
         qs = self.get_queryset().filter(id=id)  # product_objects = self.get_queryset()
@@ -38,6 +53,9 @@ class ProductManager(models.Manager):
             return qs.first()
         else:
             return None
+    
+    def search(self, query):
+        return self.get_queryset().active().search(query)
 
 
 class Product(models.Model):
@@ -48,12 +66,13 @@ class Product(models.Model):
     image = models.ImageField(upload_to=upload_image_path, null=True,
                               blank=True)
     featured = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     objects = ProductManager()
 
     def __str__(self):
         return self.title
-    
+
     def get_absolute_url(self):
         # return "/products/product/{}".format(self.slug)
         return reverse("products:details", kwargs={"slug": self.slug})

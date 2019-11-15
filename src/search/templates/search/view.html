@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+
+        <div class="row">
+        {% if query %}
+            <div class="col-12 py-3">
+                Searched for <b>{{ query }}</b>
+            </div>
+            {%else%}
+            <div class="col-12 col-md-8 mx-auto py-5">
+                    {%include 'search/snippets/search-form.html'%}
+            </div>
+        {% endif %}
+        </div>
+        <hr>
+        <div class="row">
+            {% for product in products %}
+            <div class="col">{% include "product/snippets/snippet.html" with instance=product %}
+            
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
