@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class=container>
+    <h3>Total Item: {{ order.cart.products.count }}</h3>
+    <h3>Cart Total: {{ order.cart.total }}</h3>
+    <h3>Shipping Total: {{ order.shipping_total }}</h3>
+    <h3>Order Total: {{ order.total }}</h3>
+</div>
+{% endblock %}

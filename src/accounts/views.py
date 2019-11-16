@@ -1,24 +1,7 @@
 from django.contrib.auth import authenticate, login, get_user_model
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import ContactForm
-
-
-def home_page(request):
-    context = {
-        "brand_name": "Ecommerce"
-    }
-    return render(request, "home.html", context=context)
-
-
-def contact_page(request):
-    contact_form = ContactForm(request.POST or None)
-    context = {
-        "form": contact_form
-    }
-    if contact_form.is_valid():
-        print(contact_form.cleaned_data)
-    return render(request, "contact.html", context=context)
+from .forms import RegistrationForm, LoginForm
 
 
 def login_page(request):
@@ -39,7 +22,7 @@ def login_page(request):
             redirect("/")
         else:
             print("Error")
-    return render(request, "auth/login.html", context=context)
+    return render(request, "accounts/login.html", context=context)
 
 
 User = get_user_model()
@@ -58,4 +41,4 @@ def register_page(request):
         password = form.cleaned_data.get("password")
         new_user = User.objects.create_user(username, email, password)
         print(new_user)
-    return render(request, "auth/register.html", context=context)
+    return render(request, "accounts/register.html", context=context)
