@@ -12,6 +12,9 @@
                 <img class="img-fluid" src="{{product.image.url}}" alt="Product Iamge">
             {% endif %}
         </div>
+        <div class="col">
+            {% include 'product/snippets/product-update.html' with produt=product cart=cart %}
+        </div>
     </div>
 </div>
 {% endblock %}

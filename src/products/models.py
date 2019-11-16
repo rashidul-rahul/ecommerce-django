@@ -53,7 +53,7 @@ class ProductManager(models.Manager):
             return qs.first()
         else:
             return None
-    
+
     def search(self, query):
         return self.get_queryset().active().search(query)
 
@@ -76,6 +76,10 @@ class Product(models.Model):
     def get_absolute_url(self):
         # return "/products/product/{}".format(self.slug)
         return reverse("products:details", kwargs={"slug": self.slug})
+
+    @property
+    def name(self):
+        return self.title
 
 
 def product_pre_save_recever(sender, instance, *args, **kwargs):

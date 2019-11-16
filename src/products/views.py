@@ -3,6 +3,8 @@ from django.http import Http404
 from django.views.generic import ListView, DetailView
 from .models import Product
 
+from carts.models import Cart
+
 
 class ProductFeaturedListView(ListView):
     queryset = Product.objects.all().featured()
@@ -29,7 +31,10 @@ class ProductDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(ProductDetailView, self).get_context_data(
             *args, **kwargs)
-        print(context)
+
+        request = self.request
+        cart, is_new = Cart.objects.get_or_new(request)
+        context["cart"] = cart
         return context
 
     def get_object(self, *args, **kwargs):
